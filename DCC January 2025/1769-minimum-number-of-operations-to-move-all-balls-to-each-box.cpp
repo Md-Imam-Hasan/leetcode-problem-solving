@@ -5,18 +5,27 @@ using namespace std;
 class Solution {
 public:
     vector<int> minOperations(string boxes) {
-        int i, j, len = boxes.length(), temp;
-        vector<int>ans;
+        int i, n = boxes.length();
+        vector<int>ans(n,0);
 
-        for(i=0;i<len;i++){
-            temp=0;
-            for(j=0;j<len;j++){
-                if(j==i) continue;
-                if(boxes[j]=='1'){
-                    temp+=abs(j-i);
-                }
+        int prefCount = 0, prefSum = 0;
+
+        for(i=0;i<n;i++){
+            ans[i] = prefCount*i - prefSum;
+            if(boxes[i]=='1'){
+                prefCount++;
+                prefSum+=i;
             }
-            ans.push_back(temp);
+        }
+
+        int sufCount = 0, sufSum = 0;
+
+        for(i=n-1;i>=0;i--){
+            ans[i]+=sufSum - sufCount*i;
+            if(boxes[i]=='1'){
+                sufCount++;
+                sufSum+=i;
+            }
         }
 
         return ans;
